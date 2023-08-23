@@ -26,8 +26,8 @@ export default function Form({ setEvents, setOpen }) {
   const [loading, setLoading] = useState(false); // Ajout du type boolean
   const [error, setError] = useState(null); // Ajout du type string | null
   const [event, setEvent] = useState({
-    user_id: undefined,
-    date: undefined,
+    user_id: "",
+    date: "",
     duration: 1,
     locations: [],
     symptomes: [],
@@ -36,44 +36,45 @@ export default function Form({ setEvents, setOpen }) {
   });
 
   const handleChange = (index, key) => {
-    // Ajout de l'index et du type générique keyof Event
     if (event[key].includes(index)) {
       setEvent((prevState) => ({
-        // Utilisation de prevState
         ...prevState,
-        [key]: prevState[key].filter((x) => x !== index), // Utilisation de prevState
+        [key]: prevState[key].filter((x) => x !== index),
       }));
       return;
     }
     setEvent((prevState) => ({
-      // Utilisation de prevState
       ...prevState,
-      [key]: [...prevState[key], index], // Utilisation de prevState
+      [key]: [...prevState[key], index],
     }));
   };
 
-  //   const saveEvent = async () => {
-  //     setError(null);
-  //     setLoading(true);
-  //     if (!event.date) {
-  //       setError("You must provide a date.");
-  //       return;
-  //     }
-  //     try {
-  //       const newEvent = { ...event, user_id: user?.id }; // Ajout de l'opérateur de faculté
-  //       const { data, error } = await supabase
-  //         .from<Event>("events")
-  //         .insert(newEvent); // Ajout du type générique Event
-  //       if (data) {
-  //         setEvents((prevEvents) => [...prevEvents, newEvent]);
-  //         setOpen(false);
-  //       }
-  //     } catch (error) {
-  //       console.log(error);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
+  const saveEvent = async () => {
+    setError(null);
+    setLoading(true);
+    if (!event.date) {
+      setError("You must provide a date.");
+      return;
+    }
+    try {
+      const newEvent = { ...event };
+      console.log(newEvent);
+      // const { data, error } = await supabase
+      //   .from("events")
+      //   .insert(newEvent);
+
+      setEvents((prevEvents) => [...prevEvents, newEvent]);
+      setOpen(false);
+      // if (data) {
+      //   setEvents((prevEvents) => [...prevEvents, newEvent]);
+      //   setOpen(false);
+      // }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     setEvent((prevState) => ({
@@ -263,7 +264,7 @@ export default function Form({ setEvents, setOpen }) {
               variant="contained"
               color="primary"
               className="bg-blue-600"
-              //   onClick={saveEvent}
+              onClick={saveEvent}
             >
               Save
             </Button>

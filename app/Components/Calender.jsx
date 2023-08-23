@@ -4,11 +4,11 @@ import dayjs from "dayjs";
 import CalendarHeatmap from "react-calendar-heatmap";
 import "react-calendar-heatmap/dist/styles.css";
 import { Alert, AlertTitle, Button, Grid } from "@mui/material";
-const Calender = ({ Events, setOpen }) => {
+const Calender = ({ events, setOpen }) => {
   let year = dayjs().subtract(365, "days").format("YYYY-MM-DD");
-
-  const formattedEvents = Events
-    ? Events.map((event) => ({
+  console.log("this is the calender Events", events);
+  const formattedEvents = events
+    ? events.map((event) => ({
         ...event,
         date: dayjs(event.date).format("YYYY-MM-DD"),
       }))
