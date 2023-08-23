@@ -1,6 +1,13 @@
-import './globals.css'
+"use client"
+import { useState } from 'react'
+import './globals.scss'
 import { Inter } from 'next/font/google'
-
+import { LightTheme,DarkTheme } from './theme/theme'
+import { CssBaseline, ThemeProvider } from '@mui/material'
+import { LocalizationProvider } from '@mui/x-date-pickers'
+import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs'
+import Header from './Components/Header'
+import Landing from './Components/Landing'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata = {
@@ -9,9 +16,23 @@ export const metadata = {
 }
 
 export default function RootLayout({ children }) {
+  const[isLoggedIn,setIsloggedIn] = useState(true)
+  const [isDark ,setIsDark] = useState(false)
+  const SwitchTheme = ()=>{
+    setIsDark(!isDark)
+  }
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <ThemeProvider theme={isDark ?DarkTheme:LightTheme}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+      
+      <body className={inter.className}>
+      <Header SwitchTheme={SwitchTheme} />
+        {!isLoggedIn ? <Landing /> :children}
+        </body>
+        <CssBaseline />
+        </LocalizationProvider>
+      </ThemeProvider>
     </html>
   )
 }
