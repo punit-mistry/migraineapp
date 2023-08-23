@@ -1,19 +1,29 @@
 'use client'
-import { Grid,Container } from '@mui/material'
-import * as React from 'react'
-import { useState } from 'react'
-import UseHeader from "./Components/User/Header"
-import Calender from './Components/Calender'
-import Form from './Components/Form'
+import App from "./app"
+import { useState } from "react"
+import { LightTheme,DarkTheme } from './theme/theme'
+import { CssBaseline, ThemeProvider } from '@mui/material'
+import { LocalizationProvider } from '@mui/x-date-pickers'
+import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs'
+import Header from './Components/Header'
+import Landing from './Components/Landing'
 export default function Home() {
-  const [Events,setEvents] =useState([])
-  const [open,setOpen]= useState(false)
-  return (
-   <Container>
-    <Grid> <UseHeader />  </Grid>
-    <Grid> {!open&&<Calender events={Events}setOpen={setOpen} />}
-      {open &&  <Form setEvents={setEvents} setOpen={setOpen}/>}
-         </Grid>
-   </Container>
+  const[isLoggedIn,setIsloggedIn] = useState(true)
+  const [isDark ,setIsDark] = useState(false)
+  const SwitchTheme = ()=>{
+    setIsDark(!isDark)
+  }
+return (
+<>
+<ThemeProvider theme={isDark ?DarkTheme:LightTheme}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <Header SwitchTheme={SwitchTheme} />
+        {!isLoggedIn ? <Landing /> :<App />}
+
+        <CssBaseline />
+        </LocalizationProvider>
+      </ThemeProvider>
+</>
+
   )
 }
