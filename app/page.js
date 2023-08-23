@@ -21,7 +21,7 @@ return (
 <ThemeProvider theme={isDark ?DarkTheme:LightTheme}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
         <Header SwitchTheme={SwitchTheme} />
-        {isLoggedIn ? <Landing /> :<App />}
+        {!isLoggedIn ? <Landing /> :<App />}
 
         <CssBaseline />
         </LocalizationProvider>
