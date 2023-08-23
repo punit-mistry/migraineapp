@@ -5,19 +5,18 @@ import { useState } from "react";
 import { Alert, Button, TextField, Grid } from "@mui/material";
 import Image from "next/image";
 import doctor from "../../public/doctor.png";
-// import supabase from "../../supabase";
-
+import { supabase } from "../../supabase";
 export default function Landing() {
-  const [email, setEmail] = useState(null);
+  const [emails, setEmail] = useState(null);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
 
   const login = async () => {
-    if (!email) alert("Please enter a valid email");
+    if (!emails) alert("Please enter a valid email");
     try {
       setLoading(true);
       let { data, error } = await supabase.auth.signInWithOtp({
-        email,
+        email: emails,
       });
 
       if (data) {
@@ -25,6 +24,7 @@ export default function Landing() {
       }
     } catch (error) {
       console.log(error);
+      alert(error.message);
     } finally {
       setLoading(false);
     }
@@ -63,7 +63,7 @@ export default function Landing() {
             <Button
               variant="contained"
               className="bg-blue-500"
-              //   onClick={login}
+              onClick={login}
             >
               Signup
             </Button>

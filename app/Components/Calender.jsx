@@ -41,19 +41,10 @@ const Calender = ({ events, setOpen }) => {
         startDate={year}
         showWeekdayLabels
         values={formattedEvents}
-        classForValue={(value) => {
-          if (!value) {
-            return "color-empty";
-          }
-          return `primary opacity-${value.count}`;
-        }}
       />
       <Alert severity="info">
-        <AlertTitle>Bêta</AlertTitle>
-        <span>
-          Migrainedata.app is currently in bêta; more is coming about reports
-          for your migraines.
-        </span>
+        <AlertTitle>Footer</AlertTitle>
+        <span>This is the Footer</span>
       </Alert>
     </Grid>
   );
