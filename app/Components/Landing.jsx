@@ -24,7 +24,7 @@ export default function Landing() {
       }
     } catch (error) {
       console.log(error);
-      alert(error.message);
+      // alert(error.message);
     } finally {
       setLoading(false);
     }
