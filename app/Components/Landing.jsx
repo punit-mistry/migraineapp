@@ -18,7 +18,7 @@ export default function Landing() {
       let { data, error } = await supabase.auth.signInWithOtp({
         email: emails,
       });
-
+      console.log(error.message);
       if (data) {
         setSuccess(true);
       }
@@ -31,7 +31,7 @@ export default function Landing() {
   };
   return (
     <Grid
-      className="Landing p-3"
+      className="Landing p-10"
       container
       direction="column"
       justifyContent="center"
@@ -65,7 +65,7 @@ export default function Landing() {
               className="bg-blue-500"
               onClick={login}
             >
-              Signup
+              Sign In
             </Button>
           </div>
         )}

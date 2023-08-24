@@ -3,6 +3,7 @@ import { Avatar, Grid, Button, Switch, FormControlLabel } from "@mui/material";
 import { useRouter } from "next/navigation";
 import Logo from "../../public/logo.png";
 import Image from "next/image";
+import Link from "next/link";
 const Header = ({ switchTheme, user }) => {
   const router = useRouter();
   const getFirstLetter = () => {
@@ -12,7 +13,7 @@ const Header = ({ switchTheme, user }) => {
   return (
     <Grid
       sx={{ p: 2 }}
-      // className="border-b-4 border-black"
+      className="shadow-lg"
     >
       <Grid
         container
@@ -62,6 +63,11 @@ const Header = ({ switchTheme, user }) => {
                 {getFirstLetter()}
               </Avatar>{" "}
             </Grid>
+          )}
+          {!user && (
+            <button className="w-32 h-10 bg-blue-600 hover:bg-blue-700 transition-all rounded-lg text-white">
+              <Link href="/login">SignUp</Link>
+            </button>
           )}
         </Grid>
       </Grid>
