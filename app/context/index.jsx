@@ -1,26 +1,27 @@
 "use client";
+
 import {
-  Children,
   createContext,
   useContext,
   useEffect,
+  useMemo,
   useState,
+  ReactNode,
 } from "react";
 import { supabase } from "../../supabase";
-
+import Landing from "../Components/Landing";
+import Header from "../Components/Header";
 const AuthContext = createContext({});
-export const AuthContextProvider = ({ children }) => {
+
+export const AuthContextProvider = ({ children, SwitchTheme }) => {
   const [user, setUser] = useState(false);
-  const onAuthChange = async () => {
-    console.log("Auth change");
+  const onAuthStateChange = async () => {
     try {
       const {
-        data: { user },
-        error,
-      } = await supabase.auth.getUser();
-      console.log(user, error);
-      if (data) {
-        setUser(data);
+        data: { session },
+      } = await supabase.auth.getSession();
+      if (session && session.user) {
+        setUser(session.user);
       }
     } catch (error) {
       console.log(error.message);
@@ -28,9 +29,27 @@ export const AuthContextProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    onAuthChange();
+    onAuthStateChange();
   }, []);
-  <AuthContext.Provider value={{ user }}>{Children}</AuthContext.Provider>;
+
+  const value = useMemo(() => {
+    return {
+      user,
+    };
+  }, [user]);
+
+  return (
+    <AuthContext.Provider value={value}>
+      <Header
+        switchTheme={SwitchTheme}
+        user={user}
+      />
+      {user ? children : <Landing />}
+    </AuthContext.Provider>
+  );
 };
 
-export const useAuthContext = async;
+export const useAuthContext = () => {
+  const { user } = useContext(AuthContext);
+  return { user };
+};

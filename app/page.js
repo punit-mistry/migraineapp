@@ -7,6 +7,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers'
 import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs'
 import Header from './Components/Header'
 import Landing from './Components/Landing'
+import { AuthContextProvider } from "./context"
 export default function Home() {
   const[isLoggedIn,setIsloggedIn] = useState(false)
   const [isDark ,setIsDark] = useState(false)
@@ -20,8 +21,9 @@ return (
 <>
 <ThemeProvider theme={isDark ?DarkTheme:LightTheme}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <Header SwitchTheme={SwitchTheme} />
-        {!isLoggedIn ? <Landing /> :<App />}
+        <AuthContextProvider SwitchTheme={SwitchTheme} >
+        {isLoggedIn ? <Landing /> :<App />}
+          </AuthContextProvider>
 
         <CssBaseline />
         </LocalizationProvider>

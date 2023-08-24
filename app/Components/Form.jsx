@@ -18,11 +18,13 @@ import {
 } from "@mui/material";
 import { DateTimePicker } from "@mui/x-date-pickers";
 import { LoadingButton } from "@mui/lab";
-// import supabase from "../../supabase";
-// import { useAuthContext } from "@/app/context";
-
+import { supabase } from "../../supabase";
+import { useAuthContext } from "@/app/context";
+import { GrClose } from "react-icons/gr";
 export default function Form({ setEvents, setOpen }) {
-  //   const { user } = useAuthContext();
+  const { user } = useAuthContext();
+
+  console.log(user);
   const [loading, setLoading] = useState(false); // Ajout du type boolean
   const [error, setError] = useState(null); // Ajout du type string | null
   const [event, setEvent] = useState({
@@ -32,7 +34,8 @@ export default function Form({ setEvents, setOpen }) {
     locations: [],
     symptomes: [],
     medications: [],
-    count: 0,
+    Pain_count: 0,
+    update_At: "",
   });
 
   const handleChange = (index, key) => {
@@ -57,20 +60,30 @@ export default function Form({ setEvents, setOpen }) {
       return;
     }
     try {
-      const newEvent = { ...event };
+      // var Date = new Date();
+      const newEvent = {
+        ...event,
+        update_At: dayjs(new Date()).format(),
+        user_id: user.id,
+      };
       console.log(newEvent);
       // const { data, error } = await supabase
       //   .from("events")
       //   .insert(newEvent);
-
-      setEvents((prevEvents) => [...prevEvents, newEvent]);
-      setOpen(false);
-      // if (data) {
-      //   setEvents((prevEvents) => [...prevEvents, newEvent]);
-      //   setOpen(false);
-      // }
+      const { data, error } = await supabase
+        .from("Migraine")
+        .insert(newEvent)
+        .select();
+      // setOpen(false);
+      // setEvents((prevEvents) => [...prevEvents, newEvent]);
+      if (data) {
+        setEvents((prevEvents) => [...prevEvents, newEvent]);
+        setOpen(false);
+      }
+      console.log(data, error);
     } catch (error) {
       console.log(error);
+      setError("Error inserting event Please fill all the Details !!");
     } finally {
       setLoading(false);
     }
@@ -87,11 +100,18 @@ export default function Form({ setEvents, setOpen }) {
   return (
     <Card
       variant="outlined"
+      className="shadow-xl"
       sx={{ minWidth: 275, maxWidth: 600, mx: "auto", px: 2, py: 1, my: 2 }}
     >
       <CardContent>
-        <Grid sx={{ mb: 3 }}>
+        <Grid
+          sx={{ mb: 3 }}
+          className="flex justify-between"
+        >
           <h2>Add a new crisis</h2>
+          <button onClick={() => setOpen(false)}>
+            <GrClose />
+          </button>
         </Grid>
         <Grid
           container
@@ -164,7 +184,7 @@ export default function Form({ setEvents, setOpen }) {
                   const inputElement = e.target;
                   setEvent({
                     ...event,
-                    count: parseInt(inputElement.value),
+                    Pain_count: parseInt(inputElement.value),
                   });
                 }}
               />

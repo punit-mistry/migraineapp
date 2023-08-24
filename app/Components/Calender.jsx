@@ -1,22 +1,22 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import dayjs from "dayjs";
 import CalendarHeatmap from "react-calendar-heatmap";
 import "react-calendar-heatmap/dist/styles.css";
 import { Alert, AlertTitle, Button, Grid } from "@mui/material";
 const Calender = ({ events, setOpen }) => {
   let year = dayjs().subtract(365, "days").format("YYYY-MM-DD");
-  console.log("this is the calender Events", events);
   const formattedEvents = events
     ? events.map((event) => ({
         ...event,
         date: dayjs(event.date).format("YYYY-MM-DD"),
       }))
     : [];
+
   return (
     <Grid
       item
-      className="Calendar border"
+      className="Calendar border shadow-xl shadow-blue-100"
       sx={{ p: 4 }}
     >
       <Grid
@@ -40,8 +40,12 @@ const Calender = ({ events, setOpen }) => {
       <CalendarHeatmap
         startDate={year}
         showWeekdayLabels
-        values={formattedEvents}
+        values={formattedEvents.map((event) => ({
+          date: event.date,
+          count: event.Pain_count, // Each event contributes a count of 1
+        }))}
       />
+
       <Alert severity="info">
         <AlertTitle>Footer</AlertTitle>
         <span>This is the Footer</span>
